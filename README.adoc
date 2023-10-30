@@ -9,7 +9,9 @@ More information can be found at https://dominik.win/blog/programming-swerve-dri
 =  GIT Submodule Use
 
 Add this submodule to a WPILib Project with the command:
-<git submodule add `https://github.com/4698RaiderRobotics/Swerve.git` src\Swerve>
+----
+    git submodule add https://github.com/4698RaiderRobotics/Swerve.git src\Swerve
+----
 
 This will put the swerve code file in the project `src` directory in a folder named `Swerve`.
 
