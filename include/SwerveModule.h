@@ -15,7 +15,7 @@
 
 
 #include "AbsoluteEncoder.h"
-#include "Constants.h"
+#include "SwerveConstants.h"
 
 // Class for each swerve module on the robot
 class SwerveModule {

@@ -10,9 +10,7 @@
 #include "SwerveDrive.h"
 
 
-// Drives with joystick inputs
-// This takes -1 to 1 inputs
-void Drivetrain::Drive( frc::ChassisSpeeds speeds, bool fieldRelative ) {
+void SwerveDrive::Drive( frc::ChassisSpeeds speeds, bool fieldRelative ) {
     // An array of SwerveModuleStates computed from the ChassisSpeeds object
     auto states = m_kinematics.ToSwerveModuleStates( fieldRelative ? speeds.FromFieldRelativeSpeeds( 
                     speeds.vx, speeds.vy, speeds.omega, frc::Rotation2d{ units::degree_t{ m_gyro.GetYaw() } } ) :
@@ -42,7 +40,7 @@ void Drivetrain::Drive( frc::ChassisSpeeds speeds, bool fieldRelative ) {
 }
 
 // Drives a path given a trajectory state
-void Drivetrain::DriveTrajectory( frc::Trajectory::State trajectoryState ) {
+void SwerveDrive::DriveTrajectory( frc::Trajectory::State trajectoryState ) {
     // A ChassisSpeeds objects based on the current position on the trajectory
     auto adjustedSpeeds = m_controller.Calculate( m_odometry.GetPose(), trajectoryState, trajectoryState.pose.Rotation().Degrees() );
 
@@ -50,17 +48,17 @@ void Drivetrain::DriveTrajectory( frc::Trajectory::State trajectoryState ) {
 }
 
 // Returns the pose2d of the robot
-frc::Pose2d Drivetrain::GetPose( void ) {
+frc::Pose2d SwerveDrive::GetPose( void ) {
     return m_odometry.GetPose();
 }
 
 // Resets the gyro to an angle
-void Drivetrain::ResetGyro( int angle ) {
+void SwerveDrive::ResetGyro( int angle ) {
     m_gyro.SetYaw( angle );
 }
 
 // Resets the pose to a position
-void Drivetrain::ResetPose( frc::Translation2d position ) {
+void SwerveDrive::ResetPose( frc::Translation2d position ) {
     m_odometry.ResetPosition(
         frc::Rotation2d{   units::degree_t{ m_gyro.GetYaw() }  },
         {
