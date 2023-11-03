@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include <wpi/array.h>
+#include <wpi/DataLog.h>
+
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/kinematics/ChassisSpeeds.h>
@@ -28,14 +31,20 @@ class SwerveDrive {
 
     void DriveTrajectory( frc::Trajectory::State trajectoryState );
 
+    void Periodic( void );
+
     frc::Pose2d GetPose( void );
 
     void ResetGyro( int angle );
 
     void ResetPose( frc::Translation2d position );
 
+    void StartLogging( wpi::log::DataLog& log );
+
   private:
-    SwerveStatusDisplay swerve_display{ "Swerve Drive", "Robot Wheel Status" };
+    void LogSwerveStateArray(  wpi::log::DoubleArrayLogEntry& logEntry, wpi::array<frc::SwerveModuleState, 4U> states );
+    
+  //  SwerveStatusDisplay swerve_display{ "Swerve Drive", "Robot Wheel Status" };
 
     SwerveModule m_frontLeft{ deviceIDs::kFrontLeftTurnMotorID, deviceIDs::kFrontLeftDriveMotorID, 
                             deviceIDs::kFrontLeftAbsoluteEncoderID, physical::kFrontLeftAbsoluteOffset };
@@ -47,6 +56,8 @@ class SwerveDrive {
                             deviceIDs::kBackRightAbsoluteEncoderID, physical::kBackRightAbsoluteOffset };
 
     frc::Trajectory m_trajectory;
+    wpi::array<frc::SwerveModuleState, 4U> m_desiredStates{ wpi::empty_array };
+    wpi::array<frc::SwerveModuleState, 4U> m_actualStates{ wpi::empty_array };
 
     ctre::phoenix::sensors::PigeonIMU m_gyro{deviceIDs::kPigeonIMUID};
 
@@ -70,4 +81,9 @@ class SwerveDrive {
           frc::ProfiledPIDController<units::radian> {
             1, 0, 0, frc::TrapezoidProfile<units::radian>::Constraints{
               6.28_rad_per_s, 3.14_rad_per_s / 1_s}}};
+
+    wpi::log::DoubleArrayLogEntry m_actualLogEntry;
+    wpi::log::DoubleArrayLogEntry m_desiredLogEntry;
+    wpi::log::DoubleArrayLogEntry m_poseLogEntry;
+    bool m_logging{ false };
 };
