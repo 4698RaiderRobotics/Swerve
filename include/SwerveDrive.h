@@ -99,5 +99,6 @@ class SwerveDrive {
     wpi::log::DoubleArrayLogEntry m_actualLogEntry;
     wpi::log::DoubleArrayLogEntry m_desiredLogEntry;
     wpi::log::DoubleArrayLogEntry m_poseLogEntry;
+    wpi::log::DoubleLogEntry m_gyroYawLogEntry;
     bool m_logging{ false };
 };

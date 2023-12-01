@@ -88,6 +88,9 @@ void SwerveDrive::Periodic( void ) {
         LogSwerveStateArray( m_actualLogEntry, m_actualStates );
         LogSwerveStateArray( m_desiredLogEntry, m_desiredStates );
 
+        // Log the gyro angle
+        m_gyroYawLogEntry.Append( m_gyro.GetYaw() );
+
         // Log the Robot pose
         frc::Pose2d currentPose = m_odometry.GetPose();
         m_poseLogEntry.Append( { currentPose.X().value(), 
@@ -123,6 +126,7 @@ void SwerveDrive::StartLogging( wpi::log::DataLog& log ) {
     m_actualLogEntry = wpi::log::DoubleArrayLogEntry( log, "Swerve/Actual States" );
     m_desiredLogEntry = wpi::log::DoubleArrayLogEntry( log, "Swerve/Desired States" );
     m_poseLogEntry = wpi::log::DoubleArrayLogEntry( log, "Robot/Robot2D" );
+    m_gyroYawLogEntry = wpi::log::DoubleLogEntry( log, "Swerve/GyroYaw" );
 }
 
 void SwerveDrive::LogSwerveStateArray( wpi::log::DoubleArrayLogEntry& logEntry, 
