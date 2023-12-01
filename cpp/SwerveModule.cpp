@@ -13,11 +13,11 @@ SwerveModule::SwerveModule( const int turnMotorChannel,
                            : m_driveMotor{ driveMotorChannel, rev::CANSparkMaxLowLevel::MotorType::kBrushless },
                            m_turnMotor{ turnMotorChannel, rev::CANSparkMaxLowLevel::MotorType::kBrushless },
                            m_turnEncoder{ absoluteEncoderChannel, absoluteEncoderOffset } {
-    m_drivePIDController.SetP(pidf::kDriveP);
-    m_drivePIDController.SetI(pidf::kDriveI);
-    m_drivePIDController.SetD(pidf::kDriveD);
-    m_drivePIDController.SetFF(pidf::kDriveFF);
-    m_turnPIDController.EnableContinuousInput(-180, 180);
+    m_drivePIDController.SetP( swerve::pidf::kDriveP );
+    m_drivePIDController.SetI( swerve::pidf::kDriveI );
+    m_drivePIDController.SetD( swerve::pidf::kDriveD );
+    m_drivePIDController.SetFF( swerve::pidf::kDriveFF );
+    m_turnPIDController.EnableContinuousInput( -180, 180 );
 }
 
 // Sets each individual SwerveModule to an optimized SwerveModuleState
@@ -25,7 +25,7 @@ void SwerveModule::SetDesiredState( const frc::SwerveModuleState& referenceState
     const auto state = frc::SwerveModuleState::Optimize( referenceState, m_turnEncoder.GetPosition() );
 
     // The setpoint rpm for the motor
-    units::revolutions_per_minute_t rpm = state.speed / physical::kDriveMetersPerRotation;
+    units::revolutions_per_minute_t rpm = state.speed / swerve::physical::kDriveMetersPerRotation;
 
     // Distance between the setpoint angle and the current angle in degrees
     units::degree_t dTheta =  state.angle.Degrees() - m_turnEncoder.GetPosition();
@@ -47,5 +47,6 @@ frc::SwerveModuleState SwerveModule::GetState( void ) {
 }
 
 frc::SwerveModulePosition SwerveModule::GetPosition( void ) {
-    return { units::turn_t{ m_driveEncoder.GetPosition() } * physical::kDriveMetersPerRotation, m_turnEncoder.GetPosition()  };
+    return { units::turn_t{ m_driveEncoder.GetPosition() } * swerve::physical::kDriveMetersPerRotation, 
+             m_turnEncoder.GetPosition()  };
 }
