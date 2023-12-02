@@ -6,16 +6,42 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 #include <units/angular_velocity.h>
+#include <units/angular_acceleration.h>
+
+// Turn on some tuning stuff.
+#define TUNING
 
 namespace swerve {
     namespace pidf {
         constexpr double kTurnP = 0.005;
         constexpr double kTurnI = 0;
         constexpr double kTurnD = 0;
+        constexpr double kTurnFF = 0.0000;
+            // REV Smart Motion Constants
+        constexpr double turn_kMaxVel = 1000; // RPM
+        constexpr double turn_kMinVel = 0; // RPM
+        constexpr double turn_kMaxAcc = 3000; // RPM / second
+        constexpr double turn_kAllErr = 1/360.0;  // 1 degree expressed as Rotations
+
         constexpr double kDriveP = 0.00006;
         constexpr double kDriveI = 0.000001;
         constexpr double kDriveD = 0;
         constexpr double kDriveFF = 0.000015;
+
+            // Holonomic Controller Constants
+        constexpr double X_Holo_kP = 1;
+        constexpr double X_Holo_kI = 0;
+        constexpr double X_Holo_kD = 0;
+
+        constexpr double Y_Holo_kP = 1;
+        constexpr double Y_Holo_kI = 0;
+        constexpr double Y_Holo_kD = 0;
+
+        constexpr double Th_Holo_kP = 1;
+        constexpr double Th_Holo_kI = 0;
+        constexpr double Th_Holo_kD = 0;
+        constexpr units::radians_per_second_t Th_Holo_MaxVel = 6.28_rad_per_s;
+        constexpr units::radians_per_second_squared_t Th_Holo_MaxAcc = 3.14_rad_per_s_sq;
     }
 
     namespace deviceIDs {

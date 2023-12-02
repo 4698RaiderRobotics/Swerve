@@ -1,9 +1,6 @@
 #pragma once
 
 #include <string>
-
-#include <frc/smartdashboard/SendableChooser.h>
-
 #include <units/velocity.h>
 
 #include <frc/kinematics/SwerveModuleState.h>
@@ -13,9 +10,7 @@
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
 
-
 #include "AbsoluteEncoder.h"
-#include "SwerveConstants.h"
 
 // Class for each swerve module on the robot
 class SwerveModule {
@@ -31,13 +26,15 @@ class SwerveModule {
         rev::CANSparkMax m_turnMotor;
 
         rev::SparkMaxRelativeEncoder m_driveEncoder = m_driveMotor.GetEncoder();
-        AbsoluteEncoder m_turnEncoder;
+        rev::SparkMaxRelativeEncoder m_turnEncoder = m_turnMotor.GetEncoder();
+        AbsoluteEncoder m_turnAbsEncoder;
+          // Has the relative encoder been set to the absolute encoders position?
+        bool m_turnEncoderSet{ false };
 
-        // The drive motor uses an onboard PID controller (rev::SparkMaxPIDController). 
+        // Use the onboard PID controllers (rev::SparkMaxPIDController). 
         // The motor is automatically set by the PID controller.
         rev::SparkMaxPIDController m_drivePIDController = m_driveMotor.GetPIDController();
+        rev::SparkMaxPIDController m_turnPIDController = m_turnMotor.GetPIDController();
 
-        // The turn motor uses the software PID controller (frc2::PIDController). 
-        // The motor needs to be set with the Set() function with the PID controller's output.
-        frc2::PIDController m_turnPIDController{ pidf::kTurnP, pidf::kTurnI, pidf::kTurnD };
+        friend class SwerveDrive;
 };
