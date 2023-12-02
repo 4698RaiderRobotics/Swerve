@@ -45,7 +45,8 @@ class SwerveDrive {
 
   private:
     void LogSwerveStateArray(  wpi::log::DoubleArrayLogEntry& logEntry, wpi::array<frc::SwerveModuleState, 4U> states );
-    
+    void TuneSwerveDrive();
+
   //  SwerveStatusDisplay swerve_display{ "Swerve Drive", "Robot Wheel Status" };
 
     // SwerveModule m_frontLeft{ deviceIDs::kFrontLeftTurnMotorID, deviceIDs::kFrontLeftDriveMotorID, 

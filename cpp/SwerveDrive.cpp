@@ -10,34 +10,67 @@
 #include "SwerveConstants.h"
 #include "SwerveDrive.h"
 
+#ifdef TUNING
+#include <frc/smartdashboard/SmartDashboard.h>
+#endif /* TUNING */
+
 using namespace swerve;
 
 SwerveDrive::SwerveDrive( ) 
-    : m_gyro{deviceIDs::kPigeonIMUID} 
-    , m_modules{ SwerveModule{ deviceIDs::kFrontLeftTurnMotorID, deviceIDs::kFrontLeftDriveMotorID, 
+    : m_modules{ SwerveModule{ deviceIDs::kFrontLeftTurnMotorID, deviceIDs::kFrontLeftDriveMotorID, 
                                deviceIDs::kFrontLeftAbsoluteEncoderID, physical::kFrontLeftAbsoluteOffset },
-                 SwerveModule{ deviceIDs::kFrontLeftTurnMotorID, deviceIDs::kFrontLeftDriveMotorID, 
-                               deviceIDs::kFrontLeftAbsoluteEncoderID, physical::kFrontLeftAbsoluteOffset },
-                 SwerveModule{ deviceIDs::kFrontLeftTurnMotorID, deviceIDs::kFrontLeftDriveMotorID, 
-                               deviceIDs::kFrontLeftAbsoluteEncoderID, physical::kFrontLeftAbsoluteOffset },
-                 SwerveModule{ deviceIDs::kFrontLeftTurnMotorID, deviceIDs::kFrontLeftDriveMotorID, 
-                               deviceIDs::kFrontLeftAbsoluteEncoderID, physical::kFrontLeftAbsoluteOffset } }
-    ,  m_kinematics{ frc::Translation2d{+( physical::kDriveBaseWidth / 2 ), +( physical::kDriveBaseWidth / 2 )},
-                     frc::Translation2d{+( physical::kDriveBaseWidth / 2 ), -( physical::kDriveBaseWidth / 2 )},
-                     frc::Translation2d{-( physical::kDriveBaseWidth / 2 ), +( physical::kDriveBaseWidth / 2 )},
-                     frc::Translation2d{-( physical::kDriveBaseWidth / 2 ), -( physical::kDriveBaseWidth / 2 )} }
+                 SwerveModule{ deviceIDs::kFrontRightTurnMotorID, deviceIDs::kFrontRightDriveMotorID, 
+                               deviceIDs::kFrontRightAbsoluteEncoderID, physical::kFrontRightAbsoluteOffset },
+                 SwerveModule{ deviceIDs::kBackLeftTurnMotorID, deviceIDs::kBackLeftDriveMotorID, 
+                               deviceIDs::kBackLeftAbsoluteEncoderID, physical::kBackLeftAbsoluteOffset },
+                 SwerveModule{ deviceIDs::kBackRightTurnMotorID, deviceIDs::kBackRightDriveMotorID, 
+                               deviceIDs::kBackRightAbsoluteEncoderID, physical::kBackRightAbsoluteOffset } }
+    , m_gyro{deviceIDs::kPigeonIMUID} 
+    , m_kinematics{ frc::Translation2d{+( physical::kDriveBaseWidth / 2 ), +( physical::kDriveBaseWidth / 2 )},
+                    frc::Translation2d{+( physical::kDriveBaseWidth / 2 ), -( physical::kDriveBaseWidth / 2 )},
+                    frc::Translation2d{-( physical::kDriveBaseWidth / 2 ), +( physical::kDriveBaseWidth / 2 )},
+                    frc::Translation2d{-( physical::kDriveBaseWidth / 2 ), -( physical::kDriveBaseWidth / 2 )} }
     , m_odometry{ m_kinematics, frc::Rotation2d{ 0_deg },
                     { m_modules[0].GetPosition(), 
                       m_modules[1].GetPosition(),
                       m_modules[2].GetPosition(), 
                       m_modules[3].GetPosition()
                     }, frc::Pose2d{ 0_ft, 0_ft, 0_deg } }
-    , m_controller{ frc2::PIDController{ 1, 0, 0 }, frc2::PIDController{ 1, 0, 0 },
+    , m_controller{ frc2::PIDController{ pidf::X_Holo_kP, pidf::X_Holo_kI, pidf::X_Holo_kD }, 
+                    frc2::PIDController{ pidf::Y_Holo_kP, pidf::Y_Holo_kI, pidf::Y_Holo_kD },
                     frc::ProfiledPIDController<units::radian> {
-                    1, 0, 0, frc::TrapezoidProfile<units::radian>::Constraints{
-                    6.28_rad_per_s, 3.14_rad_per_s / 1_s}}}
+                        pidf::Th_Holo_kP, pidf::Th_Holo_kI, pidf::Th_Holo_kD, 
+                        frc::TrapezoidProfile<units::radian>::Constraints{
+                            pidf::Th_Holo_MaxVel, pidf::Th_Holo_MaxAcc }}}
 
-{}
+{
+#ifdef TUNING
+        // Holonomic Controller parameters
+    frc::SmartDashboard::PutNumber("X_Holo P", m_controller.getXController().GetP() );
+    frc::SmartDashboard::PutNumber("X_Holo I", m_controller.getXController().GetI() );
+    frc::SmartDashboard::PutNumber("X_Holo D", m_controller.getXController().GetD() );
+    frc::SmartDashboard::PutNumber("Y_Holo P", m_controller.getYController().GetP() );
+    frc::SmartDashboard::PutNumber("Y_Holo I", m_controller.getYController().GetI() );
+    frc::SmartDashboard::PutNumber("Y_Holo D", m_controller.getYController().GetD() );
+    frc::SmartDashboard::PutNumber("Th_Holo P", m_controller.getThetaController().GetP() );
+    frc::SmartDashboard::PutNumber("Th_Holo I", m_controller.getThetaController().GetI() );
+    frc::SmartDashboard::PutNumber("Th_Holo D", m_controller.getThetaController().GetD() );
+    frc::SmartDashboard::PutNumber("Th_Holo MaxVel", pidf::Th_Holo_MaxVel.value() );
+    frc::SmartDashboard::PutNumber("Th_Holo MaxAcc", pidf::Th_Holo_MaxAcc.value() );
+    
+        // Swerve Module parameters
+    frc::SmartDashboard::PutNumber("Drive P", m_modules[0].m_drivePIDController.GetP() );
+    frc::SmartDashboard::PutNumber("Drive I", m_modules[0].m_drivePIDController.GetI() );
+    frc::SmartDashboard::PutNumber("Drive D", m_modules[0].m_drivePIDController.GetD() );
+    frc::SmartDashboard::PutNumber("Drive FF", m_modules[0].m_drivePIDController.GetFF() );
+    frc::SmartDashboard::PutNumber("Turn P", m_modules[0].m_turnPIDController.GetP() );
+    frc::SmartDashboard::PutNumber("Turn I", m_modules[0].m_turnPIDController.GetI() );
+    frc::SmartDashboard::PutNumber("Turn D", m_modules[0].m_turnPIDController.GetD() );
+    frc::SmartDashboard::PutNumber("Turn FF", m_modules[0].m_turnPIDController.GetFF() );
+    frc::SmartDashboard::PutNumber("Turn MaxVel", m_modules[0].m_turnPIDController.GetSmartMotionMaxVelocity() );
+    frc::SmartDashboard::PutNumber("Turn MaxAcc", m_modules[0].m_turnPIDController.GetSmartMotionMaxAccel() );
+#endif /* TUNING */
+}
 
 // ArcadeDrive drives with joystick inputs
 // This takes -1 to 1 inputs
@@ -67,6 +100,11 @@ void SwerveDrive::DriveTrajectory( frc::Trajectory::State trajState, const frc::
 }
 
 void SwerveDrive::Periodic( void ) {
+
+#ifdef TUNING
+    TuneSwerveDrive();
+#endif /* TUNING */
+
     // Sets each SwerveModule to the correct SwerveModuleState
     for( int i=0; i<4; ++i ) {
         m_modules[i].SetDesiredState( m_desiredStates[i] );
@@ -138,4 +176,54 @@ void SwerveDrive::LogSwerveStateArray( wpi::log::DoubleArrayLogEntry& logEntry,
         state_array[2*i + 1] = states[i].speed.value();
     }
     logEntry.Append( state_array );
+}
+
+void SwerveDrive::TuneSwerveDrive() {
+#ifdef TUNING
+    double val;
+    static units::radians_per_second_t MaxVel{ pidf::Th_Holo_MaxVel };
+    static units::radians_per_second_squared_t MaxAcc{ pidf::Th_Holo_MaxAcc };
+
+#define SET_HOLO_IF_CHANGED( name, pidc, getf, setf ) \
+            val = frc::SmartDashboard::GetNumber((name), pidc.getf() ); \
+            if( val != pidc.getf() ) { pidc.setf( val ); }
+
+    SET_HOLO_IF_CHANGED( "X_Holo P", m_controller.getXController(), GetP, SetP )
+    SET_HOLO_IF_CHANGED( "X_Holo I", m_controller.getXController(), GetI, SetI )
+    SET_HOLO_IF_CHANGED( "X_Holo D", m_controller.getXController(), GetD, SetD )
+    SET_HOLO_IF_CHANGED( "Y_Holo P", m_controller.getYController(), GetP, SetP )
+    SET_HOLO_IF_CHANGED( "Y_Holo I", m_controller.getYController(), GetI, SetI )
+    SET_HOLO_IF_CHANGED( "Y_Holo D", m_controller.getYController(), GetD, SetD )
+    SET_HOLO_IF_CHANGED( "Th_Holo P", m_controller.getThetaController(), GetP, SetP )
+    SET_HOLO_IF_CHANGED( "Th_Holo I", m_controller.getThetaController(), GetI, SetI )
+    SET_HOLO_IF_CHANGED( "Th_Holo D", m_controller.getThetaController(), GetD, SetD )
+
+    double sd_maxVel = frc::SmartDashboard::GetNumber( "Th_Holo MaxVel", pidf::Th_Holo_MaxVel.value() );
+    double sd_maxAcc = frc::SmartDashboard::GetNumber( "Th_Holo MaxAcc", pidf::Th_Holo_MaxAcc.value() );
+    if( sd_maxVel != MaxVel.value() || sd_maxAcc != MaxAcc.value() ) {
+        MaxVel = units::radians_per_second_t{ sd_maxVel };
+        MaxAcc = units::radians_per_second_squared_t{ sd_maxAcc };
+        m_controller.getThetaController().SetConstraints( { MaxVel, MaxAcc } );
+    }
+
+#define SET_MODULES_IF_CHANGED( name, mods, pidc, getf, setf ) \
+            val = frc::SmartDashboard::GetNumber((name), mods[0].pidc.getf() ); \
+            if( val != mods[0].pidc.getf() ) { \
+                for(int i=0; i<4; ++i ) { \
+                    mods[i].pidc.setf( val ); \
+                } \
+            }
+
+    SET_MODULES_IF_CHANGED( "Drive P", m_modules, m_drivePIDController, GetP, SetP )
+    SET_MODULES_IF_CHANGED( "Drive I", m_modules, m_drivePIDController, GetI, SetI )
+    SET_MODULES_IF_CHANGED( "Drive D", m_modules, m_drivePIDController, GetD, SetD )
+    SET_MODULES_IF_CHANGED( "Drive FF", m_modules, m_drivePIDController, GetFF, SetFF )
+    SET_MODULES_IF_CHANGED( "Turn P", m_modules, m_turnPIDController, GetP, SetP )
+    SET_MODULES_IF_CHANGED( "Turn I", m_modules, m_turnPIDController, GetI, SetI )
+    SET_MODULES_IF_CHANGED( "Turn D", m_modules, m_turnPIDController, GetD, SetD )
+    SET_MODULES_IF_CHANGED( "Turn FF", m_modules, m_turnPIDController, GetFF, SetFF )
+
+    SET_MODULES_IF_CHANGED( "Turn MaxVel", m_modules, m_turnPIDController, GetSmartMotionMaxVelocity, SetSmartMotionMaxVelocity )
+    SET_MODULES_IF_CHANGED( "Turn MaxAcc", m_modules, m_turnPIDController, GetSmartMotionMaxAccel, SetSmartMotionMaxAccel )
+#endif /* TUNING */
 }
