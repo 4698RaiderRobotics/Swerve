@@ -66,6 +66,8 @@ SwerveDrive::SwerveDrive( )
     frc::SmartDashboard::PutNumber("Turn P", m_modules[0].m_turnPIDController.GetP() );
     frc::SmartDashboard::PutNumber("Turn I", m_modules[0].m_turnPIDController.GetI() );
     frc::SmartDashboard::PutNumber("Turn D", m_modules[0].m_turnPIDController.GetD() );
+
+    frc::SmartDashboard::PutBoolean("Update Parameters", false );
 #endif /* TUNING */
 }
 
@@ -99,7 +101,10 @@ void SwerveDrive::DriveTrajectory( frc::Trajectory::State trajState, const frc::
 void SwerveDrive::Periodic( void ) {
 
 #ifdef TUNING
-    TuneSwerveDrive();
+    if( frc::SmartDashboard::GetBoolean("Update Parameters", false ) ) {
+        TuneSwerveDrive();
+        frc::SmartDashboard::PutBoolean("Update Parameters", false );
+    }
 #endif /* TUNING */
 
     // Sets each SwerveModule to the correct SwerveModuleState
