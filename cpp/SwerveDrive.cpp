@@ -66,9 +66,6 @@ SwerveDrive::SwerveDrive( )
     frc::SmartDashboard::PutNumber("Turn P", m_modules[0].m_turnPIDController.GetP() );
     frc::SmartDashboard::PutNumber("Turn I", m_modules[0].m_turnPIDController.GetI() );
     frc::SmartDashboard::PutNumber("Turn D", m_modules[0].m_turnPIDController.GetD() );
-    frc::SmartDashboard::PutNumber("Turn FF", m_modules[0].m_turnPIDController.GetFF() );
-    frc::SmartDashboard::PutNumber("Turn MaxVel", m_modules[0].m_turnPIDController.GetSmartMotionMaxVelocity() );
-    frc::SmartDashboard::PutNumber("Turn MaxAcc", m_modules[0].m_turnPIDController.GetSmartMotionMaxAccel() );
 #endif /* TUNING */
 }
 
@@ -221,9 +218,5 @@ void SwerveDrive::TuneSwerveDrive() {
     SET_MODULES_IF_CHANGED( "Turn P", m_modules, m_turnPIDController, GetP, SetP )
     SET_MODULES_IF_CHANGED( "Turn I", m_modules, m_turnPIDController, GetI, SetI )
     SET_MODULES_IF_CHANGED( "Turn D", m_modules, m_turnPIDController, GetD, SetD )
-    SET_MODULES_IF_CHANGED( "Turn FF", m_modules, m_turnPIDController, GetFF, SetFF )
-
-    SET_MODULES_IF_CHANGED( "Turn MaxVel", m_modules, m_turnPIDController, GetSmartMotionMaxVelocity, SetSmartMotionMaxVelocity )
-    SET_MODULES_IF_CHANGED( "Turn MaxAcc", m_modules, m_turnPIDController, GetSmartMotionMaxAccel, SetSmartMotionMaxAccel )
 #endif /* TUNING */
 }
