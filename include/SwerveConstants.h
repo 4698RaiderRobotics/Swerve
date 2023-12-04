@@ -16,12 +16,6 @@ namespace swerve {
         constexpr double kTurnP = 0.005;
         constexpr double kTurnI = 0;
         constexpr double kTurnD = 0;
-        constexpr double kTurnFF = 0.0000;
-            // REV Smart Motion Constants
-        constexpr double turn_kMaxVel = 1000; // RPM
-        constexpr double turn_kMinVel = 0; // RPM
-        constexpr double turn_kMaxAcc = 3000; // RPM / second
-        constexpr double turn_kAllErr = 1/360.0;  // 1 degree expressed as Rotations
 
         constexpr double kDriveP = 0.00006;
         constexpr double kDriveI = 0.000001;
@@ -59,7 +53,7 @@ namespace swerve {
         const int kBackLeftAbsoluteEncoderID = 2;
         const int kBackRightAbsoluteEncoderID = 3;
 
-        const int kPigeonIMUID = 50;
+        const int kPigeonIMUID = 13;
     }
 
     namespace physical {

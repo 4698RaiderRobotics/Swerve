@@ -6,6 +6,7 @@
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/controller/PIDController.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
 
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
@@ -26,15 +27,15 @@ class SwerveModule {
         rev::CANSparkMax m_turnMotor;
 
         rev::SparkMaxRelativeEncoder m_driveEncoder = m_driveMotor.GetEncoder();
-        rev::SparkMaxRelativeEncoder m_turnEncoder = m_turnMotor.GetEncoder();
         AbsoluteEncoder m_turnAbsEncoder;
-          // Has the relative encoder been set to the absolute encoders position?
-        bool m_turnEncoderSet{ false };
 
-        // Use the onboard PID controllers (rev::SparkMaxPIDController). 
-        // The motor is automatically set by the PID controller.
+        // Use the onboard PID controller (rev::SparkMaxPIDController). 
+        // for the drive motor.
         rev::SparkMaxPIDController m_drivePIDController = m_driveMotor.GetPIDController();
-        rev::SparkMaxPIDController m_turnPIDController = m_turnMotor.GetPIDController();
+
+          // Use a software PID controller and feedforward for the turn motor.
+        frc2::PIDController m_turnPIDController{ 0, 0, 0 };
+        frc::SimpleMotorFeedforward<units::degrees> m_turnFF;
 
         friend class SwerveDrive;
 };
