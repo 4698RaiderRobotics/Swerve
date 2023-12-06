@@ -39,19 +39,19 @@ namespace swerve {
     }
 
     namespace deviceIDs {
-        const int kFrontLeftTurnMotorID = 1;
-        const int kFrontLeftDriveMotorID = 2;
-        const int kBackLeftTurnMotorID = 3;
-        const int kBackLeftDriveMotorID = 4;
-        const int kBackRightTurnMotorID = 5;
-        const int kBackRightDriveMotorID = 6;
-        const int kFrontRightTurnMotorID = 7;
-        const int kFrontRightDriveMotorID = 8;
+        constexpr int kFrontLeftTurnMotorID = 7;
+        constexpr int kFrontLeftDriveMotorID = 8;
+        constexpr int kFrontRightTurnMotorID = 1;
+        constexpr int kFrontRightDriveMotorID = 2;
+        constexpr int kBackLeftTurnMotorID = 5;
+        constexpr int kBackLeftDriveMotorID = 6;
+        constexpr int kBackRightTurnMotorID = 3;
+        constexpr int kBackRightDriveMotorID = 4;
 
-        const int kFrontLeftAbsoluteEncoderID = 0;
-        const int kFrontRightAbsoluteEncoderID = 1;
-        const int kBackLeftAbsoluteEncoderID = 2;
-        const int kBackRightAbsoluteEncoderID = 3;
+        constexpr int kFrontLeftAbsoluteEncoderID = 1;
+        constexpr int kFrontRightAbsoluteEncoderID = 0;
+        constexpr int kBackLeftAbsoluteEncoderID = 3;
+        constexpr int kBackRightAbsoluteEncoderID = 2;
 
         const int kPigeonIMUID = 13;
     }
@@ -80,9 +80,9 @@ namespace swerve {
         constexpr units::meter_t kDriveBaseWidth = 23.25_in;
         constexpr units::meter_t kDriveBaseLength = 22.5_in;
 
-        constexpr double kFrontLeftAbsoluteOffset = 0.1244 + 0.5;
-        constexpr double kFrontRightAbsoluteOffset = 0.3902;
-        constexpr double kBackLeftAbsoluteOffset = 0.7013; 
-        constexpr double kBackRightAbsoluteOffset = 0.5409 + 0.5;
+        constexpr double kFrontLeftAbsoluteOffset = 0.1372 + 0.5;
+        constexpr double kFrontRightAbsoluteOffset = 0.3699 + 0.5;
+        constexpr double kBackLeftAbsoluteOffset = 0.7882 - 0.5;
+        constexpr double kBackRightAbsoluteOffset = 0.4485 + 0.5;
     }
 }
