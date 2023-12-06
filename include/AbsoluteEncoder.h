@@ -16,9 +16,14 @@ class AbsoluteEncoder {
             return ( m_absoluteEncoder.GetAbsolutePosition() - m_absoluteEncoderOffset ) * 360_deg;
         }
 
+        double GetRawPosition( ) {
+            return m_absoluteEncoder.GetAbsolutePosition();
+        }
+
         bool IsConnected( void ) {
             return m_absoluteEncoder.IsConnected();
         }
+
     private:
         frc::DutyCycleEncoder m_absoluteEncoder;
 

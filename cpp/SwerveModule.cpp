@@ -62,6 +62,7 @@ void SwerveModule::SetDesiredState( const frc::SwerveModuleState& referenceState
 
     DataLogger::GetInstance().SendNT( m_name + "/Turn Setpoint", state.angle.Degrees().value() );
     DataLogger::GetInstance().SendNT( m_name + "/Turn Position", m_turnAbsEncoder.GetPosition().value() );
+    DataLogger::GetInstance().SendNT( m_name + "/Turn Raw Position", m_turnAbsEncoder.GetRawPosition() );
     DataLogger::GetInstance().SendNT( m_name + "/Turn pidoutput", pidOutput );
 
     DataLogger::GetInstance().SendNT( m_name + "/Delta Theta", dTheta.value() );
