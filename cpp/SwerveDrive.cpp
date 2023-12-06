@@ -26,10 +26,10 @@ SwerveDrive::SwerveDrive( )
                  SwerveModule{ deviceIDs::kBackRightTurnMotorID, deviceIDs::kBackRightDriveMotorID, 
                                deviceIDs::kBackRightAbsoluteEncoderID, physical::kBackRightAbsoluteOffset } }
     , m_gyro{deviceIDs::kPigeonIMUID} 
-    , m_kinematics{ frc::Translation2d{+( physical::kDriveBaseWidth / 2 ), +( physical::kDriveBaseWidth / 2 )},
-                    frc::Translation2d{+( physical::kDriveBaseWidth / 2 ), -( physical::kDriveBaseWidth / 2 )},
-                    frc::Translation2d{-( physical::kDriveBaseWidth / 2 ), +( physical::kDriveBaseWidth / 2 )},
-                    frc::Translation2d{-( physical::kDriveBaseWidth / 2 ), -( physical::kDriveBaseWidth / 2 )} }
+    , m_kinematics{ frc::Translation2d{+( physical::kDriveBaseLength / 2 ), +( physical::kDriveBaseWidth / 2 )},
+                    frc::Translation2d{+( physical::kDriveBaseLength / 2 ), -( physical::kDriveBaseWidth / 2 )},
+                    frc::Translation2d{-( physical::kDriveBaseLength / 2 ), +( physical::kDriveBaseWidth / 2 )},
+                    frc::Translation2d{-( physical::kDriveBaseLength / 2 ), -( physical::kDriveBaseWidth / 2 )} }
     , m_odometry{ m_kinematics, frc::Rotation2d{ 0_deg },
                     { m_modules[0].GetPosition(), 
                       m_modules[1].GetPosition(),
@@ -105,6 +105,11 @@ void SwerveDrive::Periodic( void ) {
         TuneSwerveDrive();
         frc::SmartDashboard::PutBoolean("Update Parameters", false );
     }
+
+    frc::SmartDashboard::PutNumber("Turn Motor Position", m_modules[0].GetPosition().angle.Degrees().value());
+    frc::SmartDashboard::PutNumber("Turn Motor Position Setpoint", m_desiredStates[0].angle.Degrees().value());
+    frc::SmartDashboard::PutNumber("Drive Motor Velocity", m_modules[0].GetPosition().distance.value());
+    frc::SmartDashboard::PutNumber("Drive Motor Velocity Setpoint", m_desiredStates[0].speed.value());
 #endif /* TUNING */
 
     // Sets each SwerveModule to the correct SwerveModuleState

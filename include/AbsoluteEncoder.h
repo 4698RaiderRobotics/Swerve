@@ -13,7 +13,7 @@ class AbsoluteEncoder {
 
         // Returns the angle in degrees
         units::degree_t GetPosition( void ) {
-            return ( m_absoluteEncoder.GetAbsolutePosition() - m_absoluteEncoderOffset ) * 360_deg - 180_deg;
+            return ( m_absoluteEncoder.GetAbsolutePosition() - m_absoluteEncoderOffset ) * 360_deg;
         }
 
         bool IsConnected( void ) {

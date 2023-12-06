@@ -13,14 +13,14 @@
 
 namespace swerve {
     namespace pidf {
-        constexpr double kTurnP = 0.005;
+        constexpr double kTurnP = 0.006;
         constexpr double kTurnI = 0;
         constexpr double kTurnD = 0;
 
-        constexpr double kDriveP = 0.00006;
-        constexpr double kDriveI = 0.000001;
-        constexpr double kDriveD = 0;
-        constexpr double kDriveFF = 0.000015;
+        constexpr double kDriveP = 0.0001;
+        constexpr double kDriveI = 0.0;
+        constexpr double kDriveD = 0.0001;
+        constexpr double kDriveFF = 0.00017;
 
             // Holonomic Controller Constants
         constexpr double X_Holo_kP = 1;
@@ -58,13 +58,13 @@ namespace swerve {
 
     namespace physical {
         // Max drive speed of Mk3 swerve modules * a scalar value
-        constexpr units::meters_per_second_t kMaxDriveSpeed = 14.4_fps * 0.5;
+        constexpr units::meters_per_second_t kMaxDriveSpeed = 19_fps;
 
         // The max speed of the turn motors
         constexpr auto kMaxTurnSpeed =  5_rad_per_s;
 
         // Gear ratio of the drive motors. 6.86 rotations of the drive motor is one rotation of the wheel.
-        constexpr double kDriveGearRatio = 6.86;
+        constexpr double kDriveGearRatio = 5.14;
 
         // Compound unit for the meter per revolution constant.
         using meters_per_rev = units::compound_unit<units::meters, units::inverse<units::turns>>;
@@ -77,11 +77,12 @@ namespace swerve {
         constexpr double kTurnGearRatio = 12.8;
 
         // The width of the drive base from the center of one module to another adjacent one.
-        constexpr units::meter_t kDriveBaseWidth = 22.5_in;
+        constexpr units::meter_t kDriveBaseWidth = 23.25_in;
+        constexpr units::meter_t kDriveBaseLength = 22.5_in;
 
-        constexpr double kFrontLeftAbsoluteOffset = 0.1244;
+        constexpr double kFrontLeftAbsoluteOffset = 0.1244 + 0.5;
         constexpr double kFrontRightAbsoluteOffset = 0.3902;
         constexpr double kBackLeftAbsoluteOffset = 0.7013; 
-        constexpr double kBackRightAbsoluteOffset = 0.5409;
+        constexpr double kBackRightAbsoluteOffset = 0.5409 + 0.5;
     }
 }
