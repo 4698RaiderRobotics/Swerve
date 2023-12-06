@@ -69,6 +69,9 @@ SwerveDrive::SwerveDrive( )
 
     frc::SmartDashboard::PutBoolean("Update Parameters", false );
 #endif /* TUNING */
+
+        // Reset the gyro
+    m_gyro.SetYaw( 0.0 );
 }
 
 // ArcadeDrive drives with joystick inputs
@@ -108,7 +111,7 @@ void SwerveDrive::Periodic( void ) {
 
     frc::SmartDashboard::PutNumber("Turn Motor Position", m_modules[0].GetPosition().angle.Degrees().value());
     frc::SmartDashboard::PutNumber("Turn Motor Position Setpoint", m_desiredStates[0].angle.Degrees().value());
-    frc::SmartDashboard::PutNumber("Drive Motor Velocity", m_modules[0].GetPosition().distance.value());
+    frc::SmartDashboard::PutNumber("Drive Motor Velocity", m_modules[0].GetState().speed.value());
     frc::SmartDashboard::PutNumber("Drive Motor Velocity Setpoint", m_desiredStates[0].speed.value());
 
     m_swerve_display.SetState( m_desiredStates );
