@@ -110,6 +110,8 @@ void SwerveDrive::Periodic( void ) {
     frc::SmartDashboard::PutNumber("Turn Motor Position Setpoint", m_desiredStates[0].angle.Degrees().value());
     frc::SmartDashboard::PutNumber("Drive Motor Velocity", m_modules[0].GetPosition().distance.value());
     frc::SmartDashboard::PutNumber("Drive Motor Velocity Setpoint", m_desiredStates[0].speed.value());
+
+    m_swerve_display.SetState( m_desiredStates );
 #endif /* TUNING */
 
     // Sets each SwerveModule to the correct SwerveModuleState
