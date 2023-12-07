@@ -17,10 +17,10 @@ namespace swerve {
         constexpr double kTurnI = 0;
         constexpr double kTurnD = 0;
 
-        constexpr double kDriveP = 0.0001;
+        constexpr double kDriveP = 0.00005;
         constexpr double kDriveI = 0.0;
         constexpr double kDriveD = 0.0001;
-        constexpr double kDriveFF = 0.00017;
+        constexpr double kDriveFF = 0.000205;
 
             // Holonomic Controller Constants
         constexpr double X_Holo_kP = 1;
@@ -77,8 +77,8 @@ namespace swerve {
         constexpr double kTurnGearRatio = 12.8;
 
         // The width of the drive base from the center of one module to another adjacent one.
-        constexpr units::meter_t kDriveBaseWidth = 23.25_in;
-        constexpr units::meter_t kDriveBaseLength = 22.5_in;
+        constexpr units::meter_t kDriveBaseWidth = 23.25_in * 1.08;
+        constexpr units::meter_t kDriveBaseLength = 22.5_in * 1.08;
 
         constexpr double kFrontLeftAbsoluteOffset = 0.1372 + 0.5;
         constexpr double kFrontRightAbsoluteOffset = 0.3699 + 0.5;
