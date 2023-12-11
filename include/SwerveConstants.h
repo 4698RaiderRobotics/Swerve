@@ -17,10 +17,10 @@ namespace swerve {
         constexpr double kTurnI = 0;
         constexpr double kTurnD = 0;
 
-        constexpr double kDriveP = 0.00005;
+        constexpr double kDriveP = 0.0;
         constexpr double kDriveI = 0.0;
-        constexpr double kDriveD = 0.0001;
-        constexpr double kDriveFF = 0.000205;
+        constexpr double kDriveD = 0.0;
+        constexpr double kDriveFF = 1;
 
             // Holonomic Controller Constants
         constexpr double X_Holo_kP = 1;
@@ -39,19 +39,19 @@ namespace swerve {
     }
 
     namespace deviceIDs {
-        constexpr int kFrontLeftTurnMotorID = 7;
-        constexpr int kFrontLeftDriveMotorID = 8;
-        constexpr int kFrontRightTurnMotorID = 1;
-        constexpr int kFrontRightDriveMotorID = 2;
+        constexpr int kFrontLeftTurnMotorID = 1;
+        constexpr int kFrontLeftDriveMotorID = 2;
+        constexpr int kFrontRightTurnMotorID = 3;
+        constexpr int kFrontRightDriveMotorID = 4;
         constexpr int kBackLeftTurnMotorID = 5;
         constexpr int kBackLeftDriveMotorID = 6;
-        constexpr int kBackRightTurnMotorID = 3;
-        constexpr int kBackRightDriveMotorID = 4;
+        constexpr int kBackRightTurnMotorID = 7;
+        constexpr int kBackRightDriveMotorID = 8;
 
-        constexpr int kFrontLeftAbsoluteEncoderID = 1;
-        constexpr int kFrontRightAbsoluteEncoderID = 0;
-        constexpr int kBackLeftAbsoluteEncoderID = 3;
-        constexpr int kBackRightAbsoluteEncoderID = 2;
+        constexpr int kFrontLeftAbsoluteEncoderID = 9;
+        constexpr int kFrontRightAbsoluteEncoderID = 10;
+        constexpr int kBackLeftAbsoluteEncoderID = 11;
+        constexpr int kBackRightAbsoluteEncoderID = 12;
 
         const int kPigeonIMUID = 13;
     }
@@ -80,9 +80,9 @@ namespace swerve {
         constexpr units::meter_t kDriveBaseWidth = 23.25_in * 1.08;
         constexpr units::meter_t kDriveBaseLength = 22.5_in * 1.08;
 
-        constexpr double kFrontLeftAbsoluteOffset = 0.1372 + 0.5;
-        constexpr double kFrontRightAbsoluteOffset = 0.3699 + 0.5;
-        constexpr double kBackLeftAbsoluteOffset = 0.7882 - 0.5;
-        constexpr double kBackRightAbsoluteOffset = 0.4485 + 0.5;
+        constexpr units::degree_t kFrontLeftAbsoluteOffset = 328.7_deg;
+        constexpr units::degree_t kFrontRightAbsoluteOffset = 309.9_deg;
+        constexpr units::degree_t kBackLeftAbsoluteOffset = 142.3_deg;
+        constexpr units::degree_t kBackRightAbsoluteOffset = 115.6_deg;
     }
 }

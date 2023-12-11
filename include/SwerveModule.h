@@ -11,12 +11,15 @@
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
 
+#include <ctre/phoenix/sensors/CANCoder.h>
+#include <ctre/phoenix/motorcontrol/can/TalonFX.h>
+
 #include "AbsoluteEncoder.h"
 
 // Class for each swerve module on the robot
 class SwerveModule {
   public:
-    SwerveModule( const int turnMotorChannel, const int driveMotorChannel, const int absoluteEncoderChannel, const double absoluteEncoderOffset );
+    SwerveModule( const int turnMotorChannel, const int driveMotorChannel, const int absoluteEncoderChannel, const units::degree_t absoluteEncoderOffset );
 
     void SetDesiredState( const frc::SwerveModuleState& state );
 
@@ -25,20 +28,24 @@ class SwerveModule {
 
   private:
     std::string m_name;
-    rev::CANSparkMax m_driveMotor;
-    rev::CANSparkMax m_turnMotor;
 
-    rev::SparkMaxRelativeEncoder m_driveEncoder = m_driveMotor.GetEncoder();
-    rev::SparkMaxRelativeEncoder m_turnMotorEncoder = m_turnMotor.GetEncoder();
-    AbsoluteEncoder m_turnAbsEncoder;
+    ctre::phoenix::motorcontrol::can::TalonFX m_driveMotor;
+    ctre::phoenix::motorcontrol::can::TalonFX m_turnMotor;
 
-    // Use the onboard PID controller (rev::SparkMaxPIDController). 
-    // for the drive motor.
-    rev::SparkMaxPIDController m_drivePIDController = m_driveMotor.GetPIDController();
+    ctre::phoenix::sensors::CANCoder m_turnAbsEncoder;
+
+    
 
       // Use a software PID controller and feedforward for the turn motor.
     frc2::PIDController m_turnPIDController{ 0, 0, 0 };
     frc::SimpleMotorFeedforward<units::degrees> m_turnFF;
+
+    frc::SwerveModuleState state;
+    units::degrees_per_second_t speed;
+    units::degrees_per_second_t opSpeed;
+    units::degree_t dTheta;
+
+    double pidOutput;
 
     friend class SwerveDrive;
 };

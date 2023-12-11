@@ -9,6 +9,7 @@
 
 #include "SwerveConstants.h"
 #include "SwerveDrive.h"
+#include "DataLogger.h"
 
 #ifdef TUNING
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -59,10 +60,10 @@ SwerveDrive::SwerveDrive( )
     frc::SmartDashboard::PutNumber("Th_Holo MaxAcc", pidf::Th_Holo_MaxAcc.value() );
     
         // Swerve Module parameters
-    frc::SmartDashboard::PutNumber("Drive P", m_modules[0].m_drivePIDController.GetP() );
-    frc::SmartDashboard::PutNumber("Drive I", m_modules[0].m_drivePIDController.GetI() );
-    frc::SmartDashboard::PutNumber("Drive D", m_modules[0].m_drivePIDController.GetD() );
-    frc::SmartDashboard::PutNumber("Drive FF", m_modules[0].m_drivePIDController.GetFF() );
+    // frc::SmartDashboard::PutNumber("Drive P", m_modules[0].m_drivePIDController.GetP() );
+    // frc::SmartDashboard::PutNumber("Drive I", m_modules[0].m_drivePIDController.GetI() );
+    // frc::SmartDashboard::PutNumber("Drive D", m_modules[0].m_drivePIDController.GetD() );
+    // frc::SmartDashboard::PutNumber("Drive FF", m_modules[0].m_drivePIDController.GetFF() );
     frc::SmartDashboard::PutNumber("Turn P", m_modules[0].m_turnPIDController.GetP() );
     frc::SmartDashboard::PutNumber("Turn I", m_modules[0].m_turnPIDController.GetI() );
     frc::SmartDashboard::PutNumber("Turn D", m_modules[0].m_turnPIDController.GetD() );
@@ -109,12 +110,34 @@ void SwerveDrive::Periodic( void ) {
         frc::SmartDashboard::PutBoolean("Update Parameters", false );
     }
 
+    frc::SmartDashboard::PutNumber("Front Left Absolute Position", m_modules[0].m_turnAbsEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Front Right Absolute Position", m_modules[1].m_turnAbsEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Back Left Absolute Position", m_modules[2].m_turnAbsEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Back Right Absolute Position", m_modules[3].m_turnAbsEncoder.GetAbsolutePosition());
+
     frc::SmartDashboard::PutNumber("Turn Motor Position", m_modules[0].GetPosition().angle.Degrees().value());
     frc::SmartDashboard::PutNumber("Turn Motor Position Setpoint", m_desiredStates[0].angle.Degrees().value());
     frc::SmartDashboard::PutNumber("Drive Motor Velocity", m_modules[0].GetState().speed.value());
     frc::SmartDashboard::PutNumber("Drive Motor Velocity Setpoint", m_desiredStates[0].speed.value());
 
     m_swerve_display.SetState( m_desiredStates );
+
+#else
+    for(int i = 0; i < 3; i++) {
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Turn Setpoint", m_modules[i].state.angle.Degrees().value() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Turn Position", m_modules[i].m_turnAbsEncoder.GetPosition() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Turn Raw Position", m_modules[i].m_turnAbsEncoder.GetAbsolutePosition() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Turn pidoutput", m_modules[i].pidOutput );
+
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Delta Theta", m_modules[i].dTheta.value() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Desired RPM", m_modules[i].rpm.value() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Optimized RPM", m_modules[i].opRPM.value() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Drive Current", m_modules[i].m_driveMotor.GetOutputCurrent() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Turn Current", m_modules[i].m_turnMotor.GetOutputCurrent() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Drive Motor Speed", m_modules[i].m_driveEncoder.GetVelocity() );
+        DataLogger::GetInstance().SendNT( m_modules[i].m_name + "/Turn Motor Speed", m_modules[i].m_turnMotorEncoder.GetVelocity() );
+    }
+
 #endif /* TUNING */
 
     // Sets each SwerveModule to the correct SwerveModuleState
@@ -226,10 +249,10 @@ void SwerveDrive::TuneSwerveDrive() {
                 } \
             }
 
-    SET_MODULES_IF_CHANGED( "Drive P", m_modules, m_drivePIDController, GetP, SetP )
-    SET_MODULES_IF_CHANGED( "Drive I", m_modules, m_drivePIDController, GetI, SetI )
-    SET_MODULES_IF_CHANGED( "Drive D", m_modules, m_drivePIDController, GetD, SetD )
-    SET_MODULES_IF_CHANGED( "Drive FF", m_modules, m_drivePIDController, GetFF, SetFF )
+    // SET_MODULES_IF_CHANGED( "Drive P", m_modules, m_drivePIDController, GetP, SetP )
+    // SET_MODULES_IF_CHANGED( "Drive I", m_modules, m_drivePIDController, GetI, SetI )
+    // SET_MODULES_IF_CHANGED( "Drive D", m_modules, m_drivePIDController, GetD, SetD )
+    // SET_MODULES_IF_CHANGED( "Drive FF", m_modules, m_drivePIDController, GetFF, SetFF )
     SET_MODULES_IF_CHANGED( "Turn P", m_modules, m_turnPIDController, GetP, SetP )
     SET_MODULES_IF_CHANGED( "Turn I", m_modules, m_turnPIDController, GetI, SetI )
     SET_MODULES_IF_CHANGED( "Turn D", m_modules, m_turnPIDController, GetD, SetD )
