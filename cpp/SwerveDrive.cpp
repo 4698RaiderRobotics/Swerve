@@ -37,8 +37,8 @@ SwerveDrive::SwerveDrive( )
                       m_modules[2].GetPosition(), 
                       m_modules[3].GetPosition()
                     }, frc::Pose2d{ 0_ft, 0_ft, 0_deg } }
-    , m_controller{ frc2::PIDController{ pidf::X_Holo_kP, pidf::X_Holo_kI, pidf::X_Holo_kD }, 
-                    frc2::PIDController{ pidf::Y_Holo_kP, pidf::Y_Holo_kI, pidf::Y_Holo_kD },
+    , m_controller{ frc::PIDController{ pidf::X_Holo_kP, pidf::X_Holo_kI, pidf::X_Holo_kD }, 
+                    frc::PIDController{ pidf::Y_Holo_kP, pidf::Y_Holo_kI, pidf::Y_Holo_kD },
                     frc::ProfiledPIDController<units::radian> {
                         pidf::Th_Holo_kP, pidf::Th_Holo_kI, pidf::Th_Holo_kD, 
                         frc::TrapezoidProfile<units::radian>::Constraints{
@@ -72,7 +72,7 @@ SwerveDrive::SwerveDrive( )
 #endif /* TUNING */
 
         // Reset the gyro
-    m_gyro.SetYaw( 0.0 );
+    ResetGyro(0_deg);
 }
 
 // ArcadeDrive drives with joystick inputs
@@ -110,10 +110,10 @@ void SwerveDrive::Periodic( void ) {
         frc::SmartDashboard::PutBoolean("Update Parameters", false );
     }
 
-    frc::SmartDashboard::PutNumber("Front Left Absolute Position", m_modules[0].m_turnAbsEncoder.GetAbsolutePosition());
-    frc::SmartDashboard::PutNumber("Front Right Absolute Position", m_modules[1].m_turnAbsEncoder.GetAbsolutePosition());
-    frc::SmartDashboard::PutNumber("Back Left Absolute Position", m_modules[2].m_turnAbsEncoder.GetAbsolutePosition());
-    frc::SmartDashboard::PutNumber("Back Right Absolute Position", m_modules[3].m_turnAbsEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Front Left Absolute Position", m_modules[0].m_turnAbsEncoder.GetAbsolutePosition().GetValueAsDouble());
+    frc::SmartDashboard::PutNumber("Front Right Absolute Position", m_modules[1].m_turnAbsEncoder.GetAbsolutePosition().GetValueAsDouble());
+    frc::SmartDashboard::PutNumber("Back Left Absolute Position", m_modules[2].m_turnAbsEncoder.GetAbsolutePosition().GetValueAsDouble());
+    frc::SmartDashboard::PutNumber("Back Right Absolute Position", m_modules[3].m_turnAbsEncoder.GetAbsolutePosition().GetValueAsDouble());
 
     frc::SmartDashboard::PutNumber("Turn Motor Position", m_modules[0].GetPosition().angle.Degrees().value());
     frc::SmartDashboard::PutNumber("Turn Motor Position Setpoint", m_desiredStates[0].angle.Degrees().value());
@@ -178,8 +178,8 @@ frc::Pose2d SwerveDrive::GetPose( void ) {
 }
 
 // Resets the gyro to an angle
-void SwerveDrive::ResetGyro( int angle ) {
-    m_gyro.SetYaw( angle );
+void SwerveDrive::ResetGyro( units::degree_t angle ) {
+    m_gyro.SetYaw( angle.value() );
 }
 
 // Resets the pose to a position

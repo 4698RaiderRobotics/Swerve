@@ -37,7 +37,7 @@ class SwerveDrive {
 
     frc::Pose2d GetPose( void );
 
-    void ResetGyro( int angle );
+    void ResetGyro( units::degree_t angle );
 
     void ResetPose( frc::Translation2d position );
 
